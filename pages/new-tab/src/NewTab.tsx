@@ -1,34 +1,57 @@
 import '@src/NewTab.css';
 import '@src/NewTab.scss';
-import { useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
-import { exampleThemeStorage } from '@extension/storage';
-import { Button } from '@extension/ui';
+import { useState, useEffect } from 'react';
 import { t } from '@extension/i18n';
+import BookmarkList from './BookmarkList';
+
+const fetchBookmarks = () => {
+  return new Promise<chrome.bookmarks.BookmarkTreeNode[]>((resolve, reject) => {
+    if (chrome && chrome.bookmarks) {
+      chrome.bookmarks.getTree(bookmarkTree => {
+        if (chrome.runtime.lastError) {
+          reject(chrome.runtime.lastError);
+        } else {
+          resolve(bookmarkTree);
+        }
+      });
+    } else {
+      reject(new Error('chrome.bookmarks API is not available.'));
+    }
+  });
+};
 
 const NewTab = () => {
-  const theme = useStorage(exampleThemeStorage);
-  const isLight = theme === 'light';
-  const logo = isLight ? 'new-tab/logo_horizontal.svg' : 'new-tab/logo_horizontal_dark.svg';
-  const goGithubSite = () =>
-    chrome.tabs.create({ url: 'https://github.com/Jonghakseo/chrome-extension-boilerplate-react-vite' });
+  const [bookmarks, setBookmarks] = useState<chrome.bookmarks.BookmarkTreeNode[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
-  console.log(t('hello', 'World'));
+  useEffect(() => {
+    fetchBookmarks()
+      .then(bookmarkTree => {
+        setBookmarks(bookmarkTree);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error('북마크 로드 실패:', error);
+        setLoading(false);
+      });
+  }, []);
+
   return (
-    <div className={`App ${isLight ? 'bg-slate-50' : 'bg-gray-800'}`}>
-      <header className={`App-header ${isLight ? 'text-gray-900' : 'text-gray-100'}`}>
-        <button onClick={goGithubSite}>
-          <img src={chrome.runtime.getURL(logo)} className="App-logo" alt="logo" />
-        </button>
-        <p>
-          Edit <code>pages/new-tab/src/NewTab.tsx</code>
-        </p>
-        <h6>The color of this paragraph is defined using SASS.</h6>
-        <Button className="mt-4" onClick={exampleThemeStorage.toggle} theme={theme}>
-          {t('toggleTheme')}
-        </Button>
+    <div className={`App`}>
+      <header className="App-header">
+        <div className="mb-6 flex w-full justify-center">
+          <input
+            type="text"
+            placeholder="검색..."
+            className="w-2/3 rounded-full bg-white p-3 text-gray-700 shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 md:w-1/2 lg:w-1/3"
+          />
+        </div>
+
+        <h6>북마크 목록</h6>
+        {loading ? <div>{t('loading')}</div> : <BookmarkList bookmarks={bookmarks} />}
       </header>
     </div>
   );
 };
 
-export default withErrorBoundary(withSuspense(NewTab, <div>{t('loading')}</div>), <div> Error Occur </div>);
+export default NewTab;
