@@ -1,10 +1,11 @@
 import '@src/Options.css';
 import { useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
-import { exampleThemeStorage } from '@extension/storage';
+import { exampleThemeStorage, bookmarkPathStorage } from '@extension/storage';
 import { Button } from '@extension/ui';
 
 const Options = () => {
   const theme = useStorage(exampleThemeStorage);
+  const bookmarkPath = useStorage(bookmarkPathStorage);
   const isLight = theme === 'light';
   const logo = isLight ? 'options/logo_horizontal.svg' : 'options/logo_horizontal_dark.svg';
   const goGithubSite = () =>
@@ -15,9 +16,16 @@ const Options = () => {
       <button onClick={goGithubSite}>
         <img src={chrome.runtime.getURL(logo)} className="App-logo" alt="logo" />
       </button>
-      <p>
-        Edit <code>pages/options/src/Options.tsx</code>
-      </p>
+      <div className="my-4 text-left">
+        <label className="block text-sm mb-2">Bookmark search path</label>
+        <input
+          value={bookmarkPath}
+          onChange={e => bookmarkPathStorage.set(e.target.value)}
+          placeholder="e.g. Bookmarks Bar/Work"
+          className="w-full rounded border px-2 py-1 text-black"
+          type="text"
+        />
+      </div>
       <Button className="mt-4" onClick={exampleThemeStorage.toggle} theme={theme}>
         Toggle theme
       </Button>
