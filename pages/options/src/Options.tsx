@@ -18,11 +18,11 @@ const Options = () => {
         <img src={chrome.runtime.getURL(logo)} className="App-logo" alt="logo" />
       </button>
       <div className="my-4 text-left">
-        <label htmlFor="bookmarkPath" className="mb-2 block text-sm">
-          {t('bookmarkSearchPath')}
+        <label htmlFor="bookmark-path" className="mb-2 block text-sm">
+          Bookmark search path
         </label>
         <input
-          id="bookmarkPath"
+          id="bookmark-path"
           value={bookmarkPath}
           onChange={e => bookmarkPathStorage.set(e.target.value)}
           placeholder={t('bookmarkSearchPathPlaceholder')}
