@@ -27,7 +27,7 @@ const BookmarkList: React.FC<BookmarkProps> = ({ bookmarks }) => {
         <a href={bookmark.url} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">
           {bookmark.title}
         </a>
-        <span className="text-gray-500 text-sm truncate max-w-xs" title={bookmark.url}>
+        <span className="max-w-xs truncate text-sm text-gray-500" title={bookmark.url}>
           {bookmark.url}
         </span>
       </div>
