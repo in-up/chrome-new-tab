@@ -55,5 +55,3 @@ pnpm zip:firefox  # Firefox package
 ## Configuring the Bookmark Search Path
 
 Open the extension's options page and fill in the **Bookmark search path** field. Enter a folder path such as `Bookmarks Bar/Work`. Only bookmarks inside this folder (and its sub folders) will be searched from the new tab page. The value is stored using `bookmarkPathStorage` so changes take effect immediately.
-
-
