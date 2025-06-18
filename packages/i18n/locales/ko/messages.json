@@ -13,6 +13,12 @@
   "loading": {
     "message": "로딩 중..."
   },
+  "bookmarkSearchPath": {
+    "message": "북마크 검색 경로"
+  },
+  "bookmarkSearchPathPlaceholder": {
+    "message": "예: 북마크 바/작업"
+  },
   "greeting": {
     "description": "인사 메시지",
     "message": "안녕하세요, 제 이름은 $NAME$입니다.",
