@@ -2,6 +2,7 @@ import '@src/Options.css';
 import { useStorage, withErrorBoundary, withSuspense } from '@extension/shared';
 import { exampleThemeStorage, bookmarkPathStorage } from '@extension/storage';
 import { Button } from '@extension/ui';
+import { t } from '@extension/i18n';
 
 const Options = () => {
   const theme = useStorage(exampleThemeStorage);
@@ -17,11 +18,14 @@ const Options = () => {
         <img src={chrome.runtime.getURL(logo)} className="App-logo" alt="logo" />
       </button>
       <div className="my-4 text-left">
-        <label className="block text-sm mb-2">Bookmark search path</label>
+        <label htmlFor="bookmark-path" className="mb-2 block text-sm">
+          Bookmark search path
+        </label>
         <input
+          id="bookmark-path"
           value={bookmarkPath}
           onChange={e => bookmarkPathStorage.set(e.target.value)}
-          placeholder="e.g. Bookmarks Bar/Work"
+          placeholder={t('bookmarkSearchPathPlaceholder')}
           className="w-full rounded border px-2 py-1 text-black"
           type="text"
         />

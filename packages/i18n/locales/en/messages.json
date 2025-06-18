@@ -13,6 +13,12 @@
   "loading": {
     "message": "Loading..."
   },
+  "bookmarkSearchPath": {
+    "message": "Bookmark search path"
+  },
+  "bookmarkSearchPathPlaceholder": {
+    "message": "e.g. Bookmarks Bar/Work"
+  },
   "greeting": {
     "description": "Greeting message",
     "message": "Hello, My name is $NAME$",

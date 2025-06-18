@@ -51,9 +51,15 @@ function flattenBookmarks(nodes: chrome.bookmarks.BookmarkTreeNode[]): BookmarkI
   return flat;
 }
 
-function findFolderByPath(tree: chrome.bookmarks.BookmarkTreeNode[], path: string): chrome.bookmarks.BookmarkTreeNode[] {
+function findFolderByPath(
+  tree: chrome.bookmarks.BookmarkTreeNode[],
+  path: string,
+): chrome.bookmarks.BookmarkTreeNode[] {
   if (!path) return tree;
-  const segments = path.split('/').map(s => s.trim()).filter(Boolean);
+  const segments = path
+    .split('/')
+    .map(s => s.trim())
+    .filter(Boolean);
   let nodes = tree;
   for (const seg of segments) {
     const found = nodes.flatMap(n => n.children ?? []).find(n => n.title === seg && n.children);
@@ -84,16 +90,14 @@ const NewTab = () => {
     Promise.all([fetchBookmarkTree(), fetchHistory()]).then(([tree, his]) => {
       const folderNodes = findFolderByPath(tree, bookmarkPath);
       setBookmarks(flattenBookmarks(folderNodes));
-      setHistory(his.map(h => ({ title: h.title || h.url, url: h.url! })));
+      setHistory(his.map(h => ({ title: h.title || h.url!, url: h.url! })));
       setLoading(false);
     });
   }, [bookmarkPath]);
 
   useEffect(() => {
     const lower = query.toLowerCase();
-    const items = [...history, ...bookmarks].filter(i =>
-      `${i.title} ${i.url}`.toLowerCase().includes(lower),
-    );
+    const items = [...history, ...bookmarks].filter(i => `${i.title} ${i.url}`.toLowerCase().includes(lower));
     setResults(items);
     setHighlight(0);
   }, [query, history, bookmarks]);
@@ -130,12 +134,9 @@ const NewTab = () => {
         {loading ? (
           <div>{t('loading')}</div>
         ) : (
-          <div className="w-full max-w-xl mx-auto text-left">
+          <div className="mx-auto w-full max-w-xl text-left">
             {results.map((r, idx) => (
-              <div
-                key={`${r.url}-${idx}`}
-                className={`px-2 py-1 ${idx === highlight ? 'bg-blue-100' : ''}`}
-              >
+              <div key={`${r.url}-${idx}`} className={`px-2 py-1 ${idx === highlight ? 'bg-blue-100' : ''}`}>
                 <a href={r.url} className="text-blue-600 hover:underline" onClick={e => e.preventDefault()}>
                   {r.title}
                 </a>
